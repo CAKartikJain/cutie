@@ -199,14 +199,14 @@
             }
         });
         setTimeout(() => document.getElementById('pass-area').style.display='block', 15000);
-        function checkCode() { if(document.getElementById('codeIn').value === '2003') next(2); else alert("Try her birth year!"); }
+        function checkCode() { if(document.getElementById('codeIn').value === '2003') next(2); else alert("Try YOUR birth year!"); }
 
         // S2: COOKIE
         function crackCookie() {
             playDrumRoll();
             setTimeout(() => {
                 document.getElementById('cookie').innerHTML = "📜";
-                document.getElementById('fortune-text').innerText = "2026 will be the year you conquer all your goals!";
+                document.getElementById('fortune-text').innerText = "IIM Bangalore in 2026!";
                 document.getElementById('next2').style.display = 'block';
             }, 1000);
         }
@@ -224,7 +224,7 @@
         }
 
         // S4: POLAROIDS
-        const msgs = ["You Slay!", "Fashion Icon", "Kind Soul", "Adventure Ready", "Main Character", "Truly Iconic"];
+        const msgs = ["That smile is one to die for!", "Slaying since day 1 huh?", "Ladko ki line lagi padi rehti hai", "Pakka pichle janam me gundi thi tu!", "Main Character", "Truly Iconic"];
         const grid = document.getElementById('pol-grid');
         let flips = 0;
         msgs.forEach(m => {
@@ -263,7 +263,7 @@
         }
 
         // S6: COMPLIMENTS
-        const comps = ["You're the life of every party!", "Your aura is actually teal-glowing.", "The world is better with you in it.", "You're smart, funny, and iconic.", "23 is going to be YOUR year!"];
+        const comps = ["I was going to get you a card about getting older, but I couldn't find any that applied to someone who looks better every single year.", "Is it your birthday or did you just decide to get even more beautiful overnight to see if I'd notice? (I noticed.).", "The Earth took 365 days to go around the sun, but I only need one second to realize you’re the center of my universe.", "You’re not just a year older; you’re one year closer to us being that hot old couple everyone is jealous of.", "Happy Birthday to the woman who turned my world upside down in the best way possible. Every day with you feels like a gift I didn't know I deserved, but today is extra special because the world got a little brighter the day you were born. I’m so proud of the woman you are and so lucky to be the one standing by your side. Here’s to another year of making memories, chasing dreams, and falling even deeper in love with you."];
         let cCount = 0;
         function genComp() {
             document.getElementById('comp-text').innerText = comps[cCount % comps.length];
