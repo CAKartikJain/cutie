@@ -3,146 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DON'T OPEN THIS! 🎂</title>
+    <title>THE 23rd QUEST 🎂</title>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Poppins:wght@400;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --teal: #008080; --cyan: #00FFFF; --pink: #FF69B4;
-            --gold: #FFD700; --yellow: #FFFF00; --white: #FFFFFF;
+            --gold: #FFD700; --yellow: #FFFF00; --white: #FFFFFF; --black: #0a0a0a;
         }
 
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Poppins', sans-serif; background: black; color: white; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; 
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #000, #004d4d, #1a001a, #002222);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: white;
+        }
 
-        .screen { display: none; width: 100vw; height: 100vh; position: absolute; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #1a1a1a, #000); }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .screen { display: none; width: 100vw; height: 100vh; position: absolute; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .active { display: flex; }
+
+        .btn-gold { background: var(--gold); color: black; border: none; padding: 12px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; font-family: 'Poppins'; }
+        .btn-gold:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--gold); }
 
         /* PHASE 1: Runaway */
         #runaway-btn { background: var(--pink); color: white; padding: 15px 30px; border: none; border-radius: 50px; font-weight: 800; cursor: pointer; position: absolute; transition: 0.1s; }
-        #pass-btn { display: none; position: fixed; right: 20px; bottom: 20px; background: var(--gold); color: black; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; animation: slideIn 0.5s forwards; }
 
-        /* PHASE 2: Polaroids */
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .polaroid { width: 200px; height: 250px; perspective: 1000px; cursor: pointer; }
-        .pol-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.8s; transform-style: preserve-3d; }
+        /* PHASE 3: Scratch Card */
+        #scratch-container { position: relative; width: 300px; height: 150px; background: var(--white); border-radius: 10px; overflow: hidden; color: black; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        #scratch-canvas { position: absolute; top: 0; left: 0; cursor: crosshair; }
+
+        /* PHASE 4: Polaroids */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .polaroid { width: 180px; height: 230px; perspective: 1000px; cursor: pointer; }
+        .pol-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
         .flipped { transform: rotateY(180deg); }
-        .pol-front, .pol-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border: 10px solid white; border-bottom: 40px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.5); box-sizing: border-box;}
-        .pol-front { background: var(--teal); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; }
-        .pol-back { background: var(--white); transform: rotateY(180deg); color: black; font-family: 'Caveat', cursive; padding: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
-        .pink-text { color: var(--pink); }
+        .pol-front, .pol-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border: 8px solid white; border-bottom: 35px solid white; box-sizing: border-box; }
+        .pol-front { background: var(--teal); display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+        .pol-back { background: var(--white); transform: rotateY(180deg); color: black; font-family: 'Caveat', cursive; padding: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
 
-        /* PHASE 3: Hearts */
-        .heart-btn { font-size: 5rem; cursor: pointer; background: none; border: none; animation: pulse 1s infinite; transition: transform 0.1s; }
-        .floating-heart { position: fixed; font-size: 2rem; pointer-events: none; z-index: 100; animation: floatUp 2s forwards; }
+        /* PHASE 5: Catch Game */
+        #catcher { position: absolute; bottom: 20px; width: 100px; height: 20px; background: var(--cyan); border-radius: 10px; }
+        .falling-item { position: absolute; font-size: 2rem; }
 
-        /* PHASE 4: Cake */
-        .cake-box { font-size: 8rem; cursor: pointer; transition: 0.3s; position: relative; }
-        .cake-box:active { transform: scale(0.9); }
-        
-        /* Animations */
-        @keyframes slideIn { from { right: -150px; } to { right: 20px; } }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        @keyframes floatUp { to { transform: translateY(-100vh) rotate(360deg); opacity: 0; } }
+        /* PHASE 8: Finale */
+        #knife { position: fixed; font-size: 4rem; pointer-events: none; z-index: 999; transform: rotate(-45deg); display: none; }
+        #cake { font-size: 12rem; cursor: none; transition: 0.3s; }
+
+        /* Wish Wall Stars */
+        .wish-star { position: fixed; color: var(--yellow); font-size: 1.2rem; animation: floatWish 10s linear forwards; }
+        @keyframes floatWish { to { transform: translate(100vw, -100vh); opacity: 0; } }
+
     </style>
 </head>
 <body>
 
     <section id="s1" class="screen active">
-        <h1 style="color: var(--cyan); margin-bottom: 50px;">Is it too soon to be 23?</h1>
-        <button id="runaway-btn">YES, GO BACK!</button>
-        <button id="pass-btn" onclick="next(2)">Fine, I'll be 23... Pass →</button>
+        <h1 style="color: var(--cyan);">Feeling 23 yet?</h1>
+        <button id="runaway-btn">NO, STAY 22!</button>
+        <div id="pass-area" style="display:none; margin-top:100px;">
+            <p style="color: var(--gold);">Enter Secret Year Code:</p>
+            <input type="text" id="codeIn" style="padding:10px; border-radius:5px; border:none;">
+            <button class="btn-gold" onclick="checkCode()">Enter →</button>
+        </div>
     </section>
 
     <section id="s2" class="screen">
-        <h2 style="color: var(--gold);">6 Reasons You're Amazing</h2>
-        <div class="grid" id="polaroid-grid">
-            </div>
-        <button id="next2" style="margin-top:40px; display:none;" onclick="next(3)">Enough Sappy Stuff →</button>
+        <h2 style="color: var(--pink);">Your 23rd Year Destiny</h2>
+        <div id="cookie" style="font-size:8rem; cursor:pointer;" onclick="crackCookie()">🥠</div>
+        <p id="fortune-text" style="font-family:'Caveat'; font-size:2rem; color:var(--gold);"></p>
+        <button id="next2" class="btn-gold" style="display:none;" onclick="next(3)">Accept Destiny →</button>
     </section>
 
     <section id="s3" class="screen">
-        <h2 style="color: var(--pink);">Smasher the Heart!</h2>
-        <p>Fill the screen with love to see your cake.</p>
-        <button class="heart-btn" onclick="spawnHeart(this)">💖</button>
+        <h2 style="color: var(--cyan);">Scratch to reveal your gift!</h2>
+        <div id="scratch-container">
+            <div id="prize">1 FREE DINNER 🍕</div>
+            <canvas id="scratch-canvas" width="300" height="150"></canvas>
+        </div>
+        <button class="btn-gold" onclick="next(4)">Claim Prize →</button>
     </section>
 
     <section id="s4" class="screen">
-        <h1 style="color: var(--yellow); text-align: center;">MAKE A WISH & CLICK!</h1>
-        <div class="cake-box" onclick="cutCake()">🎂</div>
-        <h2 id="final-msg" style="display:none; color: var(--cyan);">HAPPY 23rd BIRTHDAY! 🎉</h2>
+        <h2 style="color: var(--gold);">Memories flipped for you</h2>
+        <div class="grid" id="pol-grid"></div>
+        <button id="next4" class="btn-gold" style="display:none;" onclick="next(5)">Next Level →</button>
+    </section>
+
+    <section id="s5" class="screen">
+        <h2 style="color: var(--pink);">Catch 23 Gifts! Score: <span id="score">0</span></h2>
+        <div id="game-area" style="width:100%; height:70%; position:relative;">
+            <div id="catcher"></div>
+        </div>
+    </section>
+
+    <section id="s6" class="screen">
+        <h1 id="comp-text" style="color: var(--cyan);">Ready for the truth?</h1>
+        <button class="btn-gold" onclick="genComp()">Hit Me!</button>
+        <button id="next6" class="btn-gold" style="display:none;" onclick="next(7)">Stop, I'm blushing →</button>
+    </section>
+
+    <section id="s7" class="screen">
+        <h2 style="color: var(--gold);">Make a Birthday Wish</h2>
+        <input type="text" id="wishInput" placeholder="I wish for..." style="padding:15px; width:300px; border-radius:10px;">
+        <button class="btn-gold" onclick="sendWish()">Send to Universe →</button>
+        <button class="btn-gold" onclick="next(8)">Let's Cut the Cake! →</button>
+    </section>
+
+    <section id="s8" class="screen">
+        <div id="knife">🔪</div>
+        <h1 style="color: var(--gold);">Cut the Cake!</h1>
+        <div id="cake">🎂</div>
+        <h2 id="final-msg" style="display:none; color: var(--cyan); font-size: 3rem;">HAPPY 23rd BIRTHDAY! 🎉</h2>
     </section>
 
     <script>
-        const messages = [
-            "Your <span class='pink-text'>smile</span> lights up the room!",
-            "23 looks <span class='pink-text'>iconic</span> on you.",
-            "Always keep that <span class='pink-text'>Teal</span> energy.",
-            "You are a <span class='pink-text'>true friend</span>.",
-            "To more <span class='pink-text'>adventures</span>!",
-            "You're the <span class='pink-text'>main character</span>."
-        ];
-
-        // Phase 1: Runaway Button Logic
-        const btn = document.getElementById('runaway-btn');
-        document.addEventListener('mousemove', (e) => {
-            const x = e.clientX; const y = e.clientY;
-            const bx = btn.offsetLeft + btn.offsetWidth/2;
-            const by = btn.offsetTop + btn.offsetHeight/2;
-            const dist = Math.sqrt((x-bx)**2 + (y-by)**2);
-            if(dist < 100) {
-                btn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
-                btn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
-            }
-        });
-        setTimeout(() => document.getElementById('pass-btn').style.display = 'block', 15000);
-
-        // Phase 2: Setup Polaroids
-        const grid = document.getElementById('polaroid-grid');
-        let flips = 0;
-        messages.forEach((msg, i) => {
-            const pol = document.createElement('div');
-            pol.className = 'polaroid';
-            pol.innerHTML = `
-                <div class="pol-inner" onclick="flip(this)">
-                    <div class="pol-front">✨</div>
-                    <div class="pol-back">${msg}</div>
-                </div>`;
-            grid.appendChild(pol);
-        });
-
-        function flip(el) {
-            if(!el.classList.contains('flipped')) {
-                el.classList.add('flipped');
-                flips++;
-                if(flips === 6) document.getElementById('next2').style.display = 'block';
-            }
-        }
-
-        // Phase 3: Heart Logic
-        let heartCount = 0;
-        function spawnHeart(btnEl) {
-            heartCount++;
-            const h = document.createElement('div');
-            h.className = 'floating-heart';
-            h.innerHTML = ['💖','💗','teal','💎'][Math.floor(Math.random()*4)];
-            if(h.innerHTML === 'teal') h.innerHTML = '🩵';
-            h.style.left = Math.random() * 100 + 'vw';
-            h.style.top = '100vh';
-            document.body.appendChild(h);
-            if(heartCount > 25) next(4);
-        }
-
-        // Phase 4: Cake
-        function cutCake() {
-            confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 }, colors: ['#008080', '#FF69B4', '#FFD700'] });
-            document.querySelector('.cake-box').innerHTML = '🍰';
-            document.getElementById('final-msg').style.display = 'block';
-        }
-
-        function next(num) {
+        // NAVIGATION
+        function next(n) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('s' + num).classList.add('active');
+            document.getElementById('s'+n).classList.add('active');
+            if(n===3) initScratch();
+            if(n===5) initCatchGame();
         }
+
+        // S1: RUNAWAY
+        const rBtn = document.getElementById('runaway-btn');
+        document.addEventListener('mousemove', (e) => {
+            if(document.getElementById('s1').classList.contains('active')) {
+                const dist = Math.sqrt((e.clientX - (rBtn.offsetLeft+50))**2 + (e.clientY - (rBtn.offsetTop+20))**2);
+                if(dist < 100) {
+                    rBtn.style.left = Math.random()*80 + 'vw'; rBtn.style.top = Math.random()*80 + 'vh';
+                }
+            }
+        });
+        setTimeout(() => document.getElementById('pass-area').style.display='block', 15000);
+        function checkCode() { if(document.getElementById('codeIn').value === '2003') next(2); else alert("Try her birth year!"); }
+
+        // S2: COOKIE
+        const fortunes = ["You will travel to a dream country this year!", "Success is chasing you (don't run too fast!)", "A big surprise is coming in 3 months.", "You will master a new skill that pays off."];
+        function crackCookie() {
+            document.getElementById('cookie').innerHTML = "📃";
+            document.getElementById('fortune-text').innerText = fortunes[Math.floor(Math.random()*fortunes.length)];
+            document.getElementById('next2').style.display = 'block';
+        }
+
+        // S3: SCRATCH
+        function initScratch() {
+            const canvas = document.getElementById('scratch-canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#C0C0C0'; ctx.fillRect(0,0,300,150);
+            canvas.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath(); ctx.arc(e.clientX - rect.left, e.clientY - rect.top, 20, 0, Math.PI*2); ctx.fill();
+            });
+        }
+
+        // S4: POLAROIDS
+        const polMessages = ["You're hilarious!", "Always slaying.", "Pure Gold heart.", "Adventure partner.", "Iconic vibes.", "The Best!"];
+        const grid = document.getElementById('pol-grid');
+        let flips = 0;
+        polMessages.forEach(m => {
+            const d = document.createElement('div'); d.className='polaroid';
+            d.innerHTML = `<div class="pol-inner" onclick="this.classList.toggle('flipped'); flips++; if(flips>=6)document.getElementById('next4').style.display='block';"><div class="pol-front">🎁</div><div class="pol-back">${m}</div></div>`;
+            grid.appendChild(d);
+        });
+
+        // S5: CATCH GAME
+        let score = 0;
+        function initCatchGame() {
+            const catcher = document.getElementById('catcher');
+            document.addEventListener('mousemove', (e) => catcher.style.left = e.clientX - 50 + 'px');
+            const gameInt = setInterval(() => {
+                const item = document.createElement('div'); item.className='falling-item'; item.innerHTML='🎁';
+                item.style.left = Math.random()*90 + 'vw'; item.style.top = '0px';
+                document.getElementById('game-area').appendChild(item);
+                let top = 0;
+                const fall = setInterval(() => {
+                    top += 5; item.style.top = top + 'px';
+                    const cRect = catcher.getBoundingClientRect(); const iRect = item.getBoundingClientRect();
+                    if(iRect.top > cRect.top && iRect.left > cRect.left && iRect.left < cRect.right) {
+                        score++; document.getElementById('score').innerText = score; 
+                        item.remove(); clearInterval(fall);
+                        if(score >= 23) { clearInterval(gameInt); next(6); }
+                    }
+                    if(top > window.innerHeight) { item.remove(); clearInterval(fall); }
+                }, 20);
+            }, 1000);
+        }
+
+        // S6: COMPLIMENTS
+        const comps = ["You are smart!", "You are a fashion icon!", "You make people happy!", "You're 23 and thriving!", "You are irreplaceable!"];
+        let cIdx = 0;
+        function genComp() {
+            document.getElementById('comp-text').innerText = comps[cIdx % comps.length];
+            cIdx++; if(cIdx > 5) document.getElementById('next6').style.display='block';
+        }
+
+        // S7: WISH
+        function sendWish() {
+            const val = document.getElementById('wishInput').value;
+            if(!val) return;
+            const star = document.createElement('div'); star.className='wish-star'; star.innerText = "⭐ " + val;
+            star.style.left = "10px"; star.style.top = Math.random()*80 + "vh";
+            document.body.appendChild(star);
+            document.getElementById('wishInput').value = "";
+        }
+
+        // S8: CAKE
+        const knife = document.getElementById('knife'); const cake = document.getElementById('cake');
+        document.addEventListener('mousemove', (e) => {
+            if(document.getElementById('s8').classList.contains('active')) {
+                knife.style.display = 'block'; knife.style.left = e.clientX + 'px'; knife.style.top = e.clientY + 'px';
+                const k = knife.getBoundingClientRect(); const c = cake.getBoundingClientRect();
+                if(k.left < c.right && k.right > c.left && k.top < c.bottom && k.bottom > c.top) {
+                    cake.innerHTML = "🍰"; confetti({particleCount:300, spread:100, origin:{y:0.7}});
+                    document.getElementById('final-msg').style.display='block';
+                }
+            }
+        });
     </script>
 </body>
 </html>
