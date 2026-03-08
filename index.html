@@ -19,7 +19,6 @@
             color: white;
         }
 
-        /* Animated Background Particles */
         .bg-orb {
             position: absolute; width: 400px; height: 400px;
             background: var(--teal); filter: blur(120px);
@@ -28,7 +27,6 @@
         }
         @keyframes moveOrb { from { transform: translate(-20%, -20%); } to { transform: translate(120%, 120%); } }
 
-        /* Glassmorphism Screens */
         .screen { 
             display: none; width: 100vw; height: 100vh; position: absolute; 
             flex-direction: column; align-items: center; justify-content: center; 
@@ -52,19 +50,15 @@
         }
         .btn-fancy:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 0 20px var(--cyan); }
 
-        /* PHASE 1: Runaway */
-        #runaway-btn { position: absolute; z-index: 100; background: var(--pink); border-radius: 50px; border:none; padding:15px 30px; color:white; font-weight:bold; cursor: pointer; }
+        #runaway-btn { position: absolute; z-index: 100; background: var(--pink); border-radius: 50px; border:none; padding:15px 30px; color:white; font-weight:bold; cursor: pointer; transition: 0.1s ease; }
 
-        /* PHASE 2: Cookie */
         #cookie { font-size: 8rem; transition: 0.5s; cursor: pointer; display: inline-block; }
         #cookie:hover { transform: scale(1.1) rotate(10deg); }
 
-        /* PHASE 3: Scratch */
         #scratch-container { position: relative; width: 320px; height: 160px; border-radius: 15px; overflow: hidden; margin: 20px auto; }
         #scratch-canvas { position: absolute; top: 0; left: 0; cursor: crosshair; z-index: 2; }
         .prize-text { background: var(--white); color: black; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: bold; padding: 20px; text-align: center; box-sizing: border-box; }
 
-        /* PHASE 4: Polaroids */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
         .polaroid { width: 200px; height: 250px; perspective: 1000px; }
         .pol-inner { position: relative; width: 100%; height: 100%; transition: transform 0.7s; transform-style: preserve-3d; cursor: pointer; }
@@ -77,16 +71,14 @@
         .pol-front img { width: 100%; height: 100%; object-fit: cover; }
         .pol-back { 
             background: white; color: black; transform: rotateY(180deg); 
-            font-family: 'Caveat'; font-size: 1.4rem; padding: 10px; 
+            font-family: 'Caveat'; font-size: 1.1rem; padding: 10px; 
             display: flex; align-items: center; justify-content: center; text-align: center; 
         }
 
-        /* PHASE 5: Catch Game */
         #game-area { width: 90%; height: 50vh; background: rgba(0,0,0,0.4); border-radius: 20px; position: relative; overflow: hidden; border: 2px solid var(--teal); margin-top: 20px; }
         #catcher { position: absolute; bottom: 10px; font-size: 4.5rem; pointer-events: none; transition: 0.05s; z-index: 5; }
         .falling { position: absolute; font-size: 2.5rem; z-index: 4; }
 
-        /* PHASE 8: Finale */
         #knife { position: fixed; font-size: 4.5rem; pointer-events: none; z-index: 1000; display: none; transform: rotate(-45deg); filter: drop-shadow(0 0 10px white); }
         #cake { font-size: 15rem; cursor: none; transition: 0.4s; user-select: none; }
 
@@ -100,10 +92,10 @@
     <section id="s1" class="screen active">
         <div class="glass-panel">
             <h1>Let's agree... Too soon to be 23?</h1>
-            <p>If you aren't ready to turn 23 just yet, press the button to go back to 22 ("Don't know 'bout you, but I am feeling 22 XD").</p>
+            <p>If you aren't ready to turn 23 just yet, press the button to go back to 22.</p>
             <button id="runaway-btn">I'M NOT READY!</button>
-            <div id="pass-area" style="display:none; margin-top:140px;">
-                <p style="color:var(--gold)">See, you old woman, already tired of running 😂. Okay, I will let you in only if you solve this riddle for me- "We two shared these 4 numbers even before we ever exchanged numbers.":</p>
+            <div id="pass-area" style="display:none; margin-top:160px;">
+                <p style="color:var(--gold)">See, you old woman, already tired of running 😂. Solve this riddle: "We two shared these 4 numbers even before we exchanged numbers."</p>
                 <input type="text" id="codeIn" maxlength="4" style="background:none; border:2px solid var(--teal); color:white; padding:12px; border-radius:12px; text-align:center; font-size:1.2rem; width:150px; outline:none;">
                 <br>
                 <button class="btn-fancy" onclick="checkCode()">Verify Identity →</button>
@@ -111,77 +103,21 @@
         </div>
     </section>
 
-    <section id="s2" class="screen">
-        <div class="glass-panel">
-            <h1 style="color:var(--pink)">Destiny Awaits</h1>
-            <div id="cookie" onclick="crackCookie()">🥠</div>
-            <p id="fortune-text" style="font-family:'Caveat'; font-size:2.5rem; min-height:80px; color:var(--gold);"></p>
-            <button id="next2" class="btn-fancy" style="display:none;" onclick="next(3)">Accept Destiny →</button>
-        </div>
-    </section>
-
-    <section id="s3" class="screen">
-        <div class="glass-panel">
-            <h1>Scratch Your Gift</h1>
-            <div id="scratch-container">
-                <div class="prize-text">Infinite Kisses whenever and wherever you want! 🎫</div>
-                <canvas id="scratch-canvas" width="320" height="160"></canvas>
-            </div>
-            <button class="btn-fancy" onclick="next(4)" style="margin-top:20px">Claim Reward →</button>
-        </div>
-    </section>
-
-    <section id="s4" class="screen">
-        <h1 style="margin-bottom:30px;">6 Core Memories</h1>
-        <div class="grid" id="pol-grid"></div>
-        <button id="next4" class="btn-fancy" style="display:none; margin-top:40px;" onclick="next(5)">Level Up →</button>
-    </section>
-
-    <section id="s5" class="screen">
-        <div class="glass-panel" style="width:90%">
-            <h1>Catch the Magic! Score: <span id="score" style="color:var(--pink)">0</span>/23</h1>
-            <div id="game-area">
-                <div id="catcher">🛍️</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="s6" class="screen">
-        <div class="glass-panel">
-            <h1 id="comp-text">Ready for the truth?</h1>
-            <button class="btn-fancy" onclick="genComp()">More Love!</button>
-            <button id="next6" class="btn-fancy" style="display:none;" onclick="next(7)">I'm Blushin' →</button>
-        </div>
-    </section>
-
-    <section id="s7" class="screen">
-        <div class="glass-panel">
-            <h1>Make a Wish</h1>
-            <input type="text" id="wishInput" placeholder="Type your wish..." style="width:350px; background:none; border:2px solid var(--pink); color:white; padding:18px; border-radius:15px; font-size:1.1rem; outline:none;">
-            <br>
-            <button class="btn-fancy" onclick="sendWish()">Release to Universe</button>
-            <br>
-            <button class="btn-fancy" onclick="next(8)" style="background:var(--gold); color:black;">THE FINALE →</button>
-        </div>
-    </section>
-
-    <section id="s8" class="screen">
-        <div id="knife">🔪</div>
-        <h1 style="color:var(--gold)">The Royal Slicing</h1>
-        <p>Bring the knife to the cake to make your wish come true!</p>
-        <div id="cake">🎂</div>
-        <h2 id="final-msg" style="display:none; color:var(--cyan); font-size:3.5rem; margin-top:25px; animation: fadeIn 1s;">HAPPY 23rd BIRTHDAY! 🎉</h2>
-    </section>
+    <section id="s2" class="screen"><div class="glass-panel"><h1 style="color:var(--pink)">Destiny Awaits</h1><div id="cookie" onclick="crackCookie()">🥠</div><p id="fortune-text" style="font-family:'Caveat'; font-size:2.5rem; min-height:80px; color:var(--gold);"></p><button id="next2" class="btn-fancy" style="display:none;" onclick="next(3)">Accept Destiny →</button></div></section>
+    <section id="s3" class="screen"><div class="glass-panel"><h1>Scratch Your Gift</h1><div id="scratch-container"><div class="prize-text">Infinite Kisses whenever and wherever you want! 🎫</div><canvas id="scratch-canvas" width="320" height="160"></canvas></div><button class="btn-fancy" onclick="next(4)" style="margin-top:20px">Claim Reward →</button></div></section>
+    <section id="s4" class="screen"><h1 style="margin-bottom:30px;">6 Core Memories</h1><div class="grid" id="pol-grid"></div><button id="next4" class="btn-fancy" style="display:none; margin-top:40px;" onclick="next(5)">Level Up →</button></section>
+    <section id="s5" class="screen"><div class="glass-panel" style="width:90%"><h1>Catch the Magic! Score: <span id="score" style="color:var(--pink)">0</span>/23</h1><div id="game-area"><div id="catcher">🛍️</div></div></div></section>
+    <section id="s6" class="screen"><div class="glass-panel"><h1 id="comp-text">Ready for the truth?</h1><button class="btn-fancy" onclick="genComp()">More Love!</button><button id="next6" class="btn-fancy" style="display:none;" onclick="next(7)">I'm Blushin' →</button></div></section>
+    <section id="s7" class="screen"><div class="glass-panel"><h1>Make a Wish</h1><input type="text" id="wishInput" placeholder="Type your wish..." style="width:350px; background:none; border:2px solid var(--pink); color:white; padding:18px; border-radius:15px; font-size:1.1rem; outline:none;"><br><button class="btn-fancy" onclick="sendWish()">Release to Universe</button><br><button class="btn-fancy" onclick="next(8)" style="background:var(--gold); color:black;">THE FINALE →</button></div></section>
+    <section id="s8" class="screen"><div id="knife">🔪</div><h1 style="color:var(--gold)">The Royal Slicing</h1><p>Bring the knife to the cake to make your wish come true!</p><div id="cake">🎂</div><h2 id="final-msg" style="display:none; color:var(--cyan); font-size:3.5rem; margin-top:25px; animation: fadeIn 1s;">HAPPY 23rd BIRTHDAY! 🎉</h2></section>
 
     <script>
-        // AUDIO: Drum Roll Simulation
         function playDrumRoll() {
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const duration = 1.2;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(120, audioCtx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + duration);
             gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
             gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration);
@@ -189,7 +125,6 @@
             osc.start(); osc.stop(audioCtx.currentTime + duration);
         }
 
-        // NAVIGATION
         function next(n) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('s'+n).classList.add('active');
@@ -197,23 +132,29 @@
             if(n===5) initCatchGame();
         }
 
-        // S1: RUNAWAY logic
+        // --- FIXED RUNAWAY LOGIC ---
         const rBtn = document.getElementById('runaway-btn');
         document.addEventListener('mousemove', (e) => {
             if(document.getElementById('s1').classList.contains('active')) {
-                const dist = Math.sqrt((e.clientX - (rBtn.offsetLeft + 50))**2 + (e.clientY - (rBtn.offsetTop + 20))**2);
-                if(dist < 130) {
-                    rBtn.style.left = Math.random()*75 + 'vw'; rBtn.style.top = Math.random()*75 + 'vh';
+                const rect = rBtn.getBoundingClientRect();
+                const btnCenter = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 };
+                const dist = Math.sqrt((e.clientX - btnCenter.x)**2 + (e.clientY - btnCenter.y)**2);
+                
+                if(dist < 100) {
+                    const newX = Math.random() * (window.innerWidth - rect.width);
+                    const newY = Math.random() * (window.innerHeight - rect.height);
+                    rBtn.style.left = newX + 'px';
+                    rBtn.style.top = newY + 'px';
                 }
             }
         });
-        setTimeout(() => document.getElementById('pass-area').style.display='block', 15000);
+        setTimeout(() => document.getElementById('pass-area').style.display='block', 10000); // Set to 10s for better flow
+
         function checkCode() { 
             if(document.getElementById('codeIn').value === '2003') next(2); 
             else alert("Think again! What year were you born?"); 
         }
 
-        // S2: COOKIE logic
         function crackCookie() {
             playDrumRoll();
             setTimeout(() => {
@@ -223,7 +164,6 @@
             }, 1000);
         }
 
-        // S3: SCRATCH logic
         function initScratch() {
             const canvas = document.getElementById('scratch-canvas');
             const ctx = canvas.getContext('2d');
@@ -235,38 +175,31 @@
             });
         }
 
-        // S4: POLAROID PERSONALIZATION
-        // REPLACE "URL_HERE" with your image links!
+        // --- FIXED POLAROID DATA ---
         const polaroidData = [
             { msg: "To be honest, this one picture from 6 years back holds a very special place in my heart!", img: "Photo1.jpg" },
             { msg: "I mean like... you tell me, how can this picture still manage to be one of my favourite pictures of us!", img: "Photo2.jpg" },
             { msg: "Look at the stars, look how they shine for you! And all the things you do! They are all YELLOW", img: "Photo3.jpg" },
-            { msg: "Honestly, festivals dont feel festival enough if you're not there with me to celebrate them with me! PS- I am still mad at you for always abandoning me in Diwali :(", img: "Photo4.jpg" },
-            { msg: "I look garbage but look at how gorgeous you look in this one random click. BTW that flower was such a pretty touch huh?"Photo5.jpg" },
-            { msg: "Whenever I see this picture of ours, I am just out of words! Thank you Aayushi Jain, for being the one!", img: "Photo6.jpg" }
+            { msg: "Honestly, festivals dont feel festival enough if you're not there with me! PS- I'm still mad at you for Diwali :(", img: "Photo4.jpg" },
+            { msg: "I look garbage but look at how gorgeous you look in this random click. Flower was a pretty touch huh?", img: "Photo5.jpg" },
+            { msg: "Whenever I see this picture, I am just out of words! Thank you for being the one!", img: "Photo6.jpg" }
         ];
 
         const grid = document.getElementById('pol-grid');
         let flips = 0;
         polaroidData.forEach(item => {
             const d = document.createElement('div'); d.className='polaroid';
-            d.innerHTML = `
-                <div class="pol-inner" onclick="handleFlip(this)">
-                    <div class="pol-front"><img src="${item.img}" alt="Memory"></div>
-                    <div class="pol-back">${item.msg}</div>
-                </div>`;
+            d.innerHTML = `<div class="pol-inner" onclick="handleFlip(this)"><div class="pol-front"><img src="${item.img}" alt="Memory"></div><div class="pol-back">${item.msg}</div></div>`;
             grid.appendChild(d);
         });
 
         function handleFlip(el) {
             if(!el.classList.contains('flipped')) {
-                el.classList.add('flipped');
-                flips++;
+                el.classList.add('flipped'); flips++;
                 if(flips >= 6) document.getElementById('next4').style.display = 'block';
             }
         }
 
-        // S5: CATCH GAME logic
         function initCatchGame() {
             const catcher = document.getElementById('catcher');
             const area = document.getElementById('game-area');
@@ -297,21 +230,13 @@
             }, 700);
         }
 
-        // S6: COMPLIMENTS logic
-        const comps = [
-            "I was going to get you a card about getting older, but I couldn't find any that applied to someone who looks better every single year.",
-            "Is it your birthday or did you just decide to get even more beautiful overnight to see if I'd notice? (I noticed.).",
-            "The Earth took 365 days to go around the sun, but I only need one second to realize you’re the center of my universe.",
-            "You’re not just a year older; you’re one year closer to us being that hot old couple everyone is jealous of.",
-            "Happy Birthday! Every day with you feels like a gift. I'm so proud of the woman you are and so lucky to be by your side."
-        ];
+        const comps = ["You look better every single year.", "Earth took 365 days to go around the sun, but I only need one second to realize you’re my universe.", "You’re one year closer to us being that hot old couple everyone is jealous of.", "Happy Birthday to the woman who turned my world upside down in the best way possible.", "I’m so lucky to be the one standing by your side."];
         let cCount = 0;
         function genComp() {
             document.getElementById('comp-text').innerText = comps[cCount % comps.length];
             cCount++; if(cCount > 4) document.getElementById('next6').style.display='block';
         }
 
-        // S7: WISH logic
         function sendWish() {
             const val = document.getElementById('wishInput').value;
             if(!val) return;
@@ -322,7 +247,6 @@
             document.getElementById('wishInput').value = "";
         }
 
-        // S8: CAKE & KNIFE collision
         const knife = document.getElementById('knife'); const cake = document.getElementById('cake');
         document.addEventListener('mousemove', (e) => {
             if(document.getElementById('s8').classList.contains('active')) {
